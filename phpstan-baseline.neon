@@ -1,0 +1,6 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^Call to an undefined method PHPStan\\\\Analyser\\\\Scope\\:\\:assignExpression\\(\\)\\.$#"
+			count: 1
+			path: src/Type/PhpOption/FilterReturnTypeExtension.php

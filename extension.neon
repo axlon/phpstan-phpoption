@@ -1,0 +1,19 @@
+parameters:
+    stubFiles:
+        - stubs/Option.stub
+
+services:
+    - class: Resolve\PHPStan\Type\PhpOption\EnsureReturnTypeExtension
+      tags: [phpstan.broker.dynamicStaticMethodReturnTypeExtension]
+    - class: Resolve\PHPStan\Type\PhpOption\FilterReturnTypeExtension
+      tags: [phpstan.broker.dynamicMethodReturnTypeExtension]
+    - class: Resolve\PHPStan\Type\PhpOption\FromArraysValueReturnTypeExtension
+      tags: [phpstan.broker.dynamicStaticMethodReturnTypeExtension]
+    - class: Resolve\PHPStan\Type\PhpOption\FromReturnReturnTypeExtension
+      tags: [phpstan.broker.dynamicStaticMethodReturnTypeExtension]
+    - class: Resolve\PHPStan\Type\PhpOption\FromValueReturnTypeExtension
+      tags: [phpstan.broker.dynamicStaticMethodReturnTypeExtension]
+    - class: Resolve\PHPStan\Type\PhpOption\LiftReturnTypeExtension
+      tags: [phpstan.broker.dynamicStaticMethodReturnTypeExtension]
+    - class: Resolve\PHPStan\Type\PhpOption\RejectReturnTypeExtension
+      tags: [phpstan.broker.dynamicMethodReturnTypeExtension]

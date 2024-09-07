@@ -1,0 +1,93 @@
+<?php
+
+namespace PhpOption;
+
+use IteratorAggregate;
+
+/**
+ * @template-covariant T
+ * @implements \IteratorAggregate<T>
+ */
+abstract class Option implements IteratorAggregate
+{
+    /**
+     * @template S of \PhpOption\Option
+     * @param callable(T): S $callable
+     * @param-immediately-invoked-callable $callable
+     * @return S
+     */
+    abstract public function flatMap($callable);
+
+    /**
+     * @template S
+     * @template U
+     * @param S $initialValue
+     * @param callable(S, T): U $callable
+     * @param-immediately-invoked-callable $callable
+     * @return S|U
+     */
+    abstract public function foldLeft($initialValue, $callable);
+
+    /**
+     * @template S
+     * @template U
+     * @param S $initialValue
+     * @param callable(T, S): U $callable
+     * @param-immediately-invoked-callable $callable
+     * @return S|U
+     */
+    abstract public function foldRight($initialValue, $callable);
+
+    /**
+     * @param callable(T): mixed $callable
+     * @param-immediately-invoked-callable $callable
+     * @return static
+     */
+    abstract public function forAll($callable);
+
+    /**
+     * @template S
+     * @param callable(): S $callable
+     * @param-immediately-invoked-callable $callable
+     * @return T|S
+     */
+    abstract public function getOrCall($callable);
+
+    /**
+     * @template E of \Exception
+     * @param E $ex
+     * @return T
+     * @throws E
+     */
+    abstract public function getOrThrow(\Exception $ex);
+
+    /**
+     * @deprecated Use forAll() instead.
+     * @param callable(T): mixed $callable
+     * @param-immediately-invoked-callable $callable
+     * @return void
+     */
+    abstract public function ifDefined($callable);
+
+    /**
+     * @template S
+     * @param callable(T): S $callable
+     * @param-immediately-invoked-callable $callable
+     * @return \PhpOption\Option<S>
+     */
+    abstract public function map($callable);
+
+    /**
+     * @template S
+     * @param \PhpOption\Option<S> $else
+     * @return Option<S|T>
+     */
+    abstract public function orElse(self $else);
+
+    /**
+     * @template S
+     * @param S $value
+     * @return ($value is T ? self<S> : \PhpOption\Option<never>)
+     */
+    abstract public function select($value);
+}

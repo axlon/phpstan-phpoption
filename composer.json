@@ -1,0 +1,48 @@
+{
+    "name": "resolve/phpstan-phpoption",
+    "description": "PHPStan extension for phpoption/phpoption",
+    "type": "phpstan-extension",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Choraimy Kroonstuiver",
+            "homepage": "https://github.com/resolve-php"
+        }
+    ],
+    "require": {
+        "php": "^8.1",
+        "phpstan/phpstan": "^1.12"
+    },
+    "require-dev": {
+        "phpoption/phpoption": "^1.9",
+        "phpstan/extension-installer": "^1.4",
+        "phpstan/phpstan-deprecation-rules": "^1.2",
+        "phpstan/phpstan-strict-rules": "^1.6",
+        "phpunit/phpunit": "^10.5 || ^11.3",
+        "slevomat/coding-standard": "^8.15"
+    },
+    "autoload": {
+        "psr-4": {
+            "Resolve\\PHPStan\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "phpstan/extension-installer": true
+        },
+        "sort-packages": true
+    },
+    "extra": {
+        "phpstan": {
+            "includes": [
+                "extension.neon"
+            ]
+        }
+    }
+}
