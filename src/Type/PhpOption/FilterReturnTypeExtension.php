@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
@@ -69,6 +70,17 @@ final class FilterReturnTypeExtension implements DynamicMethodReturnTypeExtensio
                 },
                 [new Arg($var)],
             );
+        } elseif (
+            (
+                $callbackArg instanceof FuncCall
+                || $callbackArg instanceof MethodCall
+                || $callbackArg instanceof StaticCall
+            )
+            && $callbackArg->isFirstClassCallable()
+        ) {
+            $var = new Variable('value');
+            $expr = clone $callbackArg;
+            $expr->args = [new Arg($var)];
         } else {
             return null;
         }

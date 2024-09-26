@@ -7,5 +7,6 @@ use function PHPStan\Testing\assertType;
 /**
  * @var \PhpOption\Option<string|null> $option
  */
-assertType('PhpOption\Option<null>', $option->filterNot('is_string'));
-assertType('PhpOption\Option<null>', $option->filterNot(static fn ($value) => is_string($value)));
+assertType('PhpOption\Option<string>', $option->filterNot('is_null'));
+assertType('PhpOption\Option<string>', $option->filterNot(static fn ($value) => is_null($value)));
+assertType('PhpOption\Option<string>', $option->filterNot(is_null(...)));
