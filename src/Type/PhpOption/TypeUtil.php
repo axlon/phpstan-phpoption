@@ -21,7 +21,11 @@ final class TypeUtil
                 return $traverse($type);
             }
 
-            return $type->isConstantScalarValue()->yes() ? $type : new NeverType();
+            if ($type->isConstantScalarValue()->yes() || $type->isConstantArray()->yes()) {
+                return $type;
+            }
+
+            return new NeverType();
         });
     }
 }
