@@ -1,12 +1,13 @@
 {
     "name": "resolve/phpstan-phpoption",
     "description": "PHPStan extension for phpoption/phpoption",
+    "keywords": ["phpstan", "phpoption", "option", "static analysis"],
     "type": "phpstan-extension",
     "license": "MIT",
     "authors": [
         {
             "name": "Choraimy Kroonstuiver",
-            "homepage": "https://github.com/resolve-php"
+            "homepage": "https://github.com/axlon"
         }
     ],
     "require": {
