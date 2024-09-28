@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Resolve\PHPStan\Type\PhpOption;
 
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\StaticCall;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\MethodReflection;
@@ -46,11 +47,14 @@ final class FromReturnReturnTypeExtension implements DynamicStaticMethodReturnTy
             ? TypeUtil::forShallowComparison($scope->getType($methodCall->getArgs()[2]->value))
             : new NullType();
 
-        $callbackReturnType = ParametersAcceptorSelector::selectSingle(
-            $callbackType->getCallableParametersAcceptors($scope),
-        )->getReturnType();
+        $parametersAcceptors = $callbackType->getCallableParametersAcceptors($scope);
 
-        $valueType = TypeCombinator::remove($callbackReturnType, $noneValueType);
+        $args = isset($methodCall->getArgs()[1])
+            ? [new Arg($methodCall->getArgs()[1]->value, unpack: true)]
+            : [];
+
+        $returnType = ParametersAcceptorSelector::selectFromArgs($scope, $args, $parametersAcceptors)->getReturnType();
+        $valueType = TypeCombinator::remove($returnType, $noneValueType);
 
         return new GenericObjectType('PhpOption\LazyOption', [
             $valueType->generalize(GeneralizePrecision::templateArgument()),
