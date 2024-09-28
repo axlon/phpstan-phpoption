@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Resolve\PHPStan\Type\PhpOption;
 
 use PHPStan\Type\NeverType;
+use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeTraverser;
 use PHPStan\Type\UnionType;
@@ -26,6 +27,17 @@ final class TypeUtil
             }
 
             return new NeverType();
+        });
+    }
+
+    public static function replaceVoid(Type $type): Type
+    {
+        return TypeTraverser::map($type, static function (Type $type, callable $traverse): Type {
+            if ($type instanceof UnionType) {
+                return $traverse($type);
+            }
+
+            return $type->isVoid()->yes() ? new NullType() : $type;
         });
     }
 }

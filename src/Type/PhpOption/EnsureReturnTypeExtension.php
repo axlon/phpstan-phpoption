@@ -60,7 +60,9 @@ final class EnsureReturnTypeExtension implements DynamicStaticMethodReturnTypeEx
 
                 if ($type->isCallable()->yes()) {
                     $type = TypeCombinator::union(...array_map(
-                        static fn (CallableParametersAcceptor $variant) => $variant->getReturnType(),
+                        static function (CallableParametersAcceptor $variant) {
+                            return TypeUtil::replaceVoid($variant->getReturnType());
+                        },
                         $type->getCallableParametersAcceptors($scope),
                     ));
                 }

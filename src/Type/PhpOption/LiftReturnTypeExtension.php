@@ -11,12 +11,14 @@ use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ParameterReflection;
 use PHPStan\Type\ClosureType;
 use PHPStan\Type\DynamicStaticMethodReturnTypeExtension;
+use PHPStan\Type\GeneralizePrecision;
 use PHPStan\Type\Generic\GenericObjectType;
-use PHPStan\Type\NeverType;
 use PHPStan\Type\NullType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
+use PHPStan\Type\TypeTraverser;
+use PHPStan\Type\UnionType;
 use Resolve\PHPStan\Reflection\PhpOption\LiftedParameterReflection;
 
 /**
@@ -61,24 +63,24 @@ final class LiftReturnTypeExtension implements DynamicStaticMethodReturnTypeExte
                     $parametersAcceptor->getParameters(),
                 );
 
-                $returnTypeIsOption = (new ObjectType('PhpOption\Option'))->isSuperTypeOf(
+                $returnType = TypeTraverser::map(
                     $parametersAcceptor->getReturnType(),
+                    static function (Type $type, callable $traverse) use ($noneValueType): Type {
+                        if ($type instanceof UnionType) {
+                            return $traverse($type);
+                        }
+
+                        if ((new ObjectType('PhpOption\Option'))->isSuperTypeOf($type)->yes()) {
+                            return $type;
+                        }
+
+                        $type = TypeCombinator::remove(TypeUtil::replaceVoid($type), $noneValueType);
+
+                        return new GenericObjectType('PhpOption\Option', [
+                            $type->generalize(GeneralizePrecision::templateArgument()),
+                        ]);
+                    },
                 );
-
-                if ($returnTypeIsOption->yes() || $returnTypeIsOption->maybe()) {
-                    $returnType = $parametersAcceptor->getReturnType();
-                } else {
-                    $returnType = new NeverType();
-                }
-
-                if ($returnTypeIsOption->no() || $returnTypeIsOption->maybe()) {
-                    $returnType = TypeCombinator::union(
-                        $returnType,
-                        new GenericObjectType('PhpOption\Option', [
-                            TypeCombinator::remove($parametersAcceptor->getReturnType(), $noneValueType),
-                        ]),
-                    );
-                }
 
                 return new ClosureType($parameters, $returnType);
             },

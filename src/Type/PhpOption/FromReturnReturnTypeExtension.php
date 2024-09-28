@@ -54,7 +54,7 @@ final class FromReturnReturnTypeExtension implements DynamicStaticMethodReturnTy
             : [];
 
         $returnType = ParametersAcceptorSelector::selectFromArgs($scope, $args, $parametersAcceptors)->getReturnType();
-        $valueType = TypeCombinator::remove($returnType, $noneValueType);
+        $valueType = TypeCombinator::remove(TypeUtil::replaceVoid($returnType), $noneValueType);
 
         return new GenericObjectType('PhpOption\LazyOption', [
             $valueType->generalize(GeneralizePrecision::templateArgument()),
