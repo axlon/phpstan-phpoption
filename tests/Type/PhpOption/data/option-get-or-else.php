@@ -6,5 +6,6 @@ use function PHPStan\Testing\assertType;
 
 /**
  * @var \PhpOption\Option<string> $option
+ * @var int $default
  */
-assertType('int|string', $option->getOrElse(123));
+assertType('int|string', $option->getOrElse($default));

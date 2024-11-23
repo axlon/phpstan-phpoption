@@ -6,9 +6,10 @@ use function PHPStan\Testing\assertType;
 
 /**
  * @var \PhpOption\Option<string> $option
+ * @var int $initialValue
  */
-assertType('int|string', $option->foldRight(123, static function ($value, $initial) {
-    assertType('int', $initial);
+assertType('int|string', $option->foldRight($initialValue, static function ($value, $initialValue) {
+    assertType('int', $initialValue);
     assertType('string', $value);
 
     return $value;

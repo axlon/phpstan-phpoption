@@ -90,7 +90,7 @@ final class FilterReturnTypeExtension implements DynamicMethodReturnTypeExtensio
         }
 
         $valueType = $scope->getType(new MethodCall($methodCall->var, 'get'));
-        $scope = $scope->assignExpression($var, $valueType);
+        $scope = $scope->assignExpression($var, $valueType, $valueType);
 
         if ($methodReflection->getName() === 'filter') {
             $scope = $scope->filterByTruthyValue($expr);
