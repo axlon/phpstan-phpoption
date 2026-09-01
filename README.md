@@ -2,6 +2,12 @@
 
 PHPStan extension for [phpoption/phpoption](https://github.com/schmittjoh/php-option).
 
+> [!WARNING]
+> **This package is no longer maintained.**
+>
+> phpoption/phpoption 1.9.6 and 1.10.0 improved the library's own type annotations to the point where a separate PHPStan
+> extension is no longer worth maintaining.
+
 ## Installation
 
 You may install this package using Composer using the command below. PHPStan should detect the extension automatically
